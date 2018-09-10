@@ -35,12 +35,4 @@ npm test
 
 ## 5. Test Endpoint using [Postman](https://www.getpostman.com/)
 Sample
-http://localhost:8000/api/user/{operations}
-
-## 6. Add code implementation and push local changes
-```bash
-git add .
-git commit -m "First commit"
-git remote add origin https://github.com/aws-ems/ems-api.git
-git push origin master
-```
+http://localhost:8000/api/user/signup
