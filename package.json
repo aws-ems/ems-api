@@ -1,0 +1,40 @@
+{
+  "name": "ems-api",
+  "version": "1.0.0",
+  "description": "RESTful API for ems",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "nodemon ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aws-ems/ems-api.git"
+  },
+  "keywords": [
+    "node",
+    "REST",
+    "api"
+  ],
+  "author": "paulhenry.atienza@awsys-i.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aws-ems/ems-api/issues"
+  },
+  "homepage": "https://github.com/aws-ems/ems-api#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "mongoose": "^5.2.12",
+    "mongoose-unique-validator": "^2.0.1",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4"
+  }
+}
