@@ -198,9 +198,10 @@
                   "type": "integer",
                   "example": 3600
                 },
-                "userId": {
-                  "type": "string",
-                  "example": "5b827957263b31a19fc7cd73d"
+                "user": {
+                  "shema": {
+                    "$ref": "#/definitions/User"
+                  }
                 }
               }
             }
