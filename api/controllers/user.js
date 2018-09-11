@@ -30,6 +30,47 @@ exports.createUser = (req, res, next) => {
   });
 }
 
+exports.changePassword = (req, res, next) => {
+  let fetchedUser;
+  console.log(req.body.id);
+  User.findOne({ _id: req.body.id })
+    .then(user => {
+      if (!user) {
+        res.status(401).json({
+          message: "User not found!"
+        });
+      } else {
+        fetchedUser = user;
+        return bcrypt.compare(req.body.oldPassword, user.password);
+      }
+    })
+    .then(result => {
+      if (!result || req.userData.userId !== req.body.id) {
+        res.status(401).json({
+          message: "Invalid Authentication Credentials"
+        });
+      } else {
+      return bcrypt.hash(req.body.newPassword, 10);
+      }
+    }).then(newPassword => {
+      console.log(fetchedUser);
+      fetchedUser.password = newPassword;
+      User.updateOne({_id: req.userData.userId}, fetchedUser)
+      .then(result => {
+        if (result.n > 0) {
+          res.status(200).json({
+            header: 'Change Password',
+            message: 'Your password has been changed successfully!'
+          });
+        } else {
+          res.status(401).json({
+            message: 'Password change failed!'
+          });
+        };
+      });
+    });
+}
+
 exports.userLogin = (req, res, next) => {
   let fetchedUser;
   User.findOne({ email: req.body.email })

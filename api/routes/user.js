@@ -9,6 +9,8 @@ router.post("/signup", UserController.createUser);
 
 router.post("/login", UserController.userLogin);
 
+router.put("/password-change", checkAuth, UserController.changePassword);
+
 router.get("/", checkAuth, UserController.getUsers);
 
 router.get("/:id", checkAuth, UserController.getUser);
