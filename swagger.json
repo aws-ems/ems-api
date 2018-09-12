@@ -198,16 +198,79 @@
                   "type": "integer",
                   "example": 3600
                 },
-                "user": {
-                  "shema": {
-                    "$ref": "#/definitions/User"
-                  }
+                "userId": {
+                  "type": "string",
+                  "example": "5b827957263b31a19fc7cd73d"
                 }
               }
             }
           },
           "401": {
             "description": "Auth failed",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/user/password-change": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Submit Change password Request",
+        "description": "Requires Login",
+        "operationId": "changePassword",
+        "security": [
+          {
+            "token": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User Request Details",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "oldPassword": {
+                  "type": "string"
+                },
+                "newPassword": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "header": {
+                  "type": "string",
+                  "example": "Change Password"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Your password has been changed successfully!"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password Change Failed",
             "schema": {
               "$ref": "#/definitions/ErrorResponse"
             }
