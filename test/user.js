@@ -32,7 +32,7 @@ let userId;
 * - Create an account, login with details, and check if token comes
 */
  
-describe('Create Account, Login and Check Token', function() {
+describe('Login Module', function() {
     before(function(done) {
         //console.log('Deleting user...');
         User.deleteOne({'email':'sponge@bob.com'})
@@ -41,7 +41,7 @@ describe('Create Account, Login and Check Token', function() {
             });
     });
 
-    describe('Login Module', function() {
+    describe('Create an account, login with details, and check if token comes', function() {
 
         it('should deny login to non-existing user', function(done) {
             chai.request(server)
@@ -94,8 +94,9 @@ describe('Create Account, Login and Check Token', function() {
                     res.body.should.have.property('expiresIn');
                     res.body.should.have.property('user');
                     res.body.user.should.be.a('object');
-
+                    
                     accessToken = res.body.token;
+                    userId = res.body.user._id;
                     done();
                 });
         });
@@ -117,3 +118,63 @@ describe('Create Account, Login and Check Token', function() {
         });
     });
 })
+
+describe('Change Password Module', function() {
+    
+    describe('Submit change password request', function() {
+
+        it('should not permit unauthorized users', function(done) {
+            chai.request(server)
+                .put('/api/user/password-change')
+                .send({
+                    "id": userId,
+                    "oldPassword": "notlegitpassword",
+                    "newPassword": "awsol123#"
+                })
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    res.should.be.json; 
+                    res.body.should.have.property('message');
+    
+                    done();
+                });
+        });
+
+        it('should not update when old password is mismatched', function(done) {
+            chai.request(server)
+                .put('/api/user/password-change')
+                .set('Authorization', "hello " + accessToken)
+                .send({
+                    "id": userId,
+                    "oldPassword": "notlegitpassword",
+                    "newPassword": "awsol123#"
+                })
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    res.should.be.json; 
+                    res.body.should.have.property('message');
+
+                    done();
+                });
+        });
+
+        it('should update the password of the user', function(done) {
+            chai.request(server)
+                .put('/api/user/password-change')
+                .set('Authorization', "hello " + accessToken)
+                .send({
+                    "id": userId,
+                    "oldPassword": "garyTheSnail",
+                    "newPassword": "awsol123"
+                })
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.should.be.json; 
+                    res.body.should.have.property('header');
+                    res.body.should.have.property('message');
+
+                    done();
+                });
+        });
+    });
+});
