@@ -10,14 +10,15 @@ const swaggerDocument = require('./swagger.json');
 
 const homepage = require('./index');
 const userRoutes = require('./api/routes/user');
-mongoose.set('useCreateIndex', true);
+
 mongoose.connect(process.env.DATABASE_URI, { useNewUrlParser: true });
+mongoose.set('useCreateIndex', true);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
