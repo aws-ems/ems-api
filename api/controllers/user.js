@@ -68,7 +68,11 @@ exports.changePassword = (req, res, next) => {
           });
         };
       });
-    });
+    }).catch(err => {
+      res.status(500).json({
+        message: "Failed to change user password!"
+      });
+    });;
 }
 
 exports.userLogin = (req, res, next) => {
