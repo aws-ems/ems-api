@@ -112,6 +112,36 @@ exports.getUser =  (req, res, next) => {
     })
 }
 
+exports.roleView = (req, res, next) => {
+  const pageSize = +req.query.pagesize;
+  const currentPage = +req.query.page;
+  const userQuery = User.find();
+
+  let fetchedUser;
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+  }
+
+  userQuery
+    .then(docs => {
+      fetchedUser = docs;
+      return User.countDocuments();
+    })
+    .then(count => {
+      res.status(200).json({
+        message: "Users fetched successfully!",
+        users: fetchedUser,
+        maxUsers: count,
+        roleTypeSel: User.schema.path('role').enumValues
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Fetching users failed!"
+      });
+    });
+}
+
 exports.deleteUser = (req, res, next) => {
     User.deleteOne({_id: req.params.id})
       .then(result => {

@@ -6,16 +6,18 @@ const checkAuthAdmin = require("../middleware/check-auth-admin");
 
 const router = express.Router();
 
+router.get("/role-view", checkAuth, checkAuthAdmin, UserController.roleView);
+
+router.get("/:id", checkAuth, UserController.getUser);
+
+router.get("/", checkAuth, UserController.getUsers);
+
 router.post("/signup", UserController.createUser);
 
 router.post("/login", UserController.userLogin);
 
-router.get("/", checkAuth, UserController.getUsers);
-
-router.get("/:id", checkAuth, UserController.getUser);
+router.put("/role-update", checkAuth, checkAuthAdmin, UserController.roleChange);
 
 router.delete("/:id", checkAuth, UserController.deleteUser);
-
-router.put("/role-update", checkAuth, checkAuthAdmin, UserController.roleChange);
 
 module.exports = router;
