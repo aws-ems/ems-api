@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+let async = require('async');
 
 const User = require("../models/user");
 
@@ -121,4 +122,15 @@ exports.deleteUser = (req, res, next) => {
         }
       }
     );
+}
+
+exports.roleChange = (req, res, next) => {
+  let data = req.body.updateData
+  async.eachSeries(data, function updateObject(obj, done) {
+    User.update({ _id: obj.id }, { role: obj.role }, done);
+  }, function allDone (err) {
+      // Error Handling
+      console.log(err);
+      res.status(200).json({ message: "Role update successful!" });
+  });
 }
