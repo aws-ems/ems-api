@@ -32,13 +32,10 @@ exports.createUser = (req, res, next) => {
 
 exports.changePassword = (req, res, next) => {
   let fetchedUser;
-  console.log(req.body.id);
   User.findOne({ _id: req.body.id })
     .then(user => {
       if (!user) {
-        res.status(401).json({
-          message: "User not found!"
-        });
+        throw new Error("User not found!");
       } else {
         fetchedUser = user;
         return bcrypt.compare(req.body.oldPassword, user.password);
@@ -46,14 +43,11 @@ exports.changePassword = (req, res, next) => {
     })
     .then(result => {
       if (!result || req.userData.userId !== req.body.id) {
-        res.status(401).json({
-          message: "Invalid Authentication Credentials"
-        });
+        throw new Error("Invalid Authentication Credentials!");
       } else {
-      return bcrypt.hash(req.body.newPassword, 10);
+        return bcrypt.hash(req.body.newPassword, 10);
       }
     }).then(newPassword => {
-      console.log(fetchedUser);
       fetchedUser.password = newPassword;
       User.updateOne({_id: req.userData.userId}, fetchedUser)
       .then(result => {
@@ -69,9 +63,9 @@ exports.changePassword = (req, res, next) => {
         };
       });
     }).catch(err => {
-      res.status(500).json({
-        message: "Failed to change user password!"
-      });
+        res.status(401).json({
+          message: err.message
+        });
     });;
 }
 
