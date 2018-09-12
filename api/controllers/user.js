@@ -35,7 +35,7 @@ exports.userLogin = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
-        return res.status(401).json({
+        res.status(401).json({
           message: "Auth failed"
         });
       }
@@ -44,7 +44,7 @@ exports.userLogin = (req, res, next) => {
     })
     .then(result => {
       if (!result) {
-        return res.status(401).json({
+        res.status(401).json({
           message: "Auth failed"
         });
       }
@@ -60,9 +60,11 @@ exports.userLogin = (req, res, next) => {
       });
     })
     .catch(err => {
-      return res.status(401).json({
-        message: "Invalid authentication credentials!"
-      });
+      if(!res.headersSent) {
+        res.status(401).json({
+          message: "Invalid Credentials!"
+        });
+      }
     });
 }
 

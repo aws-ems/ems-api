@@ -4,7 +4,7 @@
   "description": "RESTful API for ems",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "nodemon --exec \"mocha --timeout 10000 --recursive\"",
     "start": "nodemon ./bin/www"
   },
   "repository": {
@@ -37,6 +37,8 @@
     "chai": "^4.1.2",
     "chai-http": "^4.2.0",
     "mocha": "^5.2.0",
-    "nodemon": "^1.18.4"
+    "nodemon": "^1.18.4",
+    "superagent": "^3.8.3",
+    "supertest": "^3.3.0"
   }
 }
